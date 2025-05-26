@@ -1,0 +1,51 @@
+package com.example;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class ExcelWriter {
+    public static void main(String[] args) {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Sheet1");
+
+        String[][] data = {
+            {"Name", "Age", "Email"},
+            {"John Doe", "30", "john@test.com"},
+            {"Jane Doe", "28", "john@test.com"},
+            {"Bob Smith", "35", "jacky@example.com"},
+            {"Swapnil", "37", "swapnil@example.com"}
+        };
+
+        for (int i = 0; i < data.length; i++) {
+            Row row = sheet.createRow(i);
+            for (int j = 0; j < data[i].length; j++) {
+                Cell cell = row.createCell(j);
+                cell.setCellValue(data[i][j]);
+            }
+        }
+
+        for (int i = 0; i < data[0].length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        FileOutputStream fileOut = null;
+        try {
+            fileOut = new FileOutputStream("ExcelData.xlsx");
+            workbook.write(fileOut);
+            System.out.println("Excel file created successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fileOut != null) {
+                    fileOut.close();
+                }
+                workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    } // END of main method
+} // END of class
